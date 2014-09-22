@@ -8,12 +8,28 @@
 
 #import "BRACollectionView.h"
 
-@implementation BRACollectionView
+@implementation BRACollectionView {
+  NSInteger _numberOfRows;
+}
+
+- (instancetype)init
+{
+  if (self == [super init]) {
+    _numberOfRows = NSNotFound;
+  }
+  
+  return self;
+}
 
 - (NSInteger)numberOfRows
 {
+  if (_numberOfRows != NSNotFound) {
+    return _numberOfRows;
+  }
+  
   if ([self.dataSource respondsToSelector:@selector(numberOfRowsForCollectionView:)]) {
-    return [self.dataSource numberOfRowsForCollectionView:self];
+    _numberOfRows = [self.dataSource numberOfRowsForCollectionView:self];
+    return _numberOfRows;
   }
   
   return 0;
