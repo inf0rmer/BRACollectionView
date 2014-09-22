@@ -13,6 +13,8 @@
 - (CGFloat)calculateContentHeight;
 - (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 
+@property (nonatomic, strong) NSArray *cellHeights;
+
 @end
 
 @implementation BRACollectionView {
@@ -78,13 +80,22 @@
   return 44.f;
 }
 
+- (NSArray *)getCellHeights {
+  return [[self rows] map:^NSNumber *(NSNumber *rowNumber) {
+    return @([self heightForRowAtIndexPath:[NSIndexPath indexPathWithIndex:[rowNumber integerValue]]]);
+  }];
+}
+
 - (CGFloat)calculateContentHeight
 {
+  // Cache cell heights
+  self.cellHeights = [self getCellHeights];
+  
   // The latest ObjectiveSugar version on Cocoapods
   // does not yet have #reduce. Sigh.
   __block CGFloat totalHeight = 0;
-  [[self rows] each:^(NSNumber *rowNumber) {
-    totalHeight += [self heightForRowAtIndexPath:[NSIndexPath indexPathWithIndex:[rowNumber integerValue]]];
+  [self.cellHeights each:^(NSNumber *height) {
+    totalHeight += [height floatValue];
   }];
   
   return totalHeight;

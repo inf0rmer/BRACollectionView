@@ -14,6 +14,8 @@
 
 - (CGFloat)calculateContentHeight;
 
+@property (nonatomic, strong) NSArray *cellHeights;
+
 @end
 
 SPEC_BEGIN(BRACOLLECTIONVIEWSPEC)
@@ -70,6 +72,14 @@ describe(@"BRACollectionView", ^{
       
       [[dataSource should] receive:@selector(numberOfRowsForCollectionView:)];
       [collectionView numberOfRows];
+    });
+    
+    it(@"Caches #cellHeights", ^{
+      collectionView.cellHeights = nil;
+      
+      [collectionView reloadData];
+      
+      [[collectionView.cellHeights shouldNot] beNil];
     });
     
     context(@"When the delegate does not provide cell height", ^{
