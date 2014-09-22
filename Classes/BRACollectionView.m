@@ -12,6 +12,8 @@
   NSInteger _numberOfRows;
 }
 
+#pragma mark - Lifecycle
+
 - (instancetype)init
 {
   if (self == [super init]) {
@@ -20,6 +22,8 @@
   
   return self;
 }
+
+#pragma mark - Public Interface
 
 - (NSInteger)numberOfRows
 {
@@ -33,6 +37,11 @@
   }
   
   return 0;
+}
+
+- (void)reloadData
+{
+  _numberOfRows = NSNotFound;
 }
 
 @end

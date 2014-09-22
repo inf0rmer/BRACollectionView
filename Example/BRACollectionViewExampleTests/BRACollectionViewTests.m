@@ -49,6 +49,23 @@ describe(@"BRACollectionView", ^{
     });
   });
   
+  describe(@"#reloadData", ^{
+    beforeEach(^{
+      collectionView.dataSource = dataSource;
+      [dataSource stub:@selector(numberOfRowsForCollectionView:) andReturn:theValue(15)];
+      
+      // Ensure #numberOfRows is cached
+      [collectionView numberOfRows];
+    });
+    
+    it(@"Busts the #numberOfRows cache", ^{
+      [collectionView reloadData];
+      
+      [[dataSource should] receive:@selector(numberOfRowsForCollectionView:)];
+      [collectionView numberOfRows];
+    });
+  });
+  
 });
 
 SPEC_END
