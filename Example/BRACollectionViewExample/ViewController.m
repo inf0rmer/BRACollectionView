@@ -51,6 +51,11 @@ static NSString *cellIdentifier = @"Cell";
   NSLog(@"number of views :%lu", (unsigned long)self.view.subviews.count);
 }
 
+- (void)collectionView:(BRACollectionView *)collectionView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  NSLog(@"Tapped cell at index path: %ld", (long)indexPath.row);
+}
+
 #pragma mark - BRACollectionViewDataSource
 
 - (BRACollectionViewCell *)collectionView:(BRACollectionView *)collectionView

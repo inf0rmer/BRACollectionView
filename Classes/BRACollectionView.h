@@ -43,7 +43,7 @@
  */
 - (void)collectionView:(BRACollectionView *)collectionView
        willDisplayCell:(BRACollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath;
+    forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 /**
  You can use this hook to customise a cell after it is rendered.
@@ -54,7 +54,7 @@
  */
 - (void)collectionView:(BRACollectionView *)collectionView
         didDisplayCell:(BRACollectionViewCell *)cell
-    forItemAtIndexPath:(NSIndexPath *)indexPath;
+    forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 ///---------------------
 /// @name Variable Height

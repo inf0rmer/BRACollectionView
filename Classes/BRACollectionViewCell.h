@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface BRACollectionViewCell : UIView
+@interface BRACollectionViewCell : UIControl
 
 @property (nonatomic, strong) NSString *reuseIdentifier;
 

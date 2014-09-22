@@ -163,7 +163,9 @@
 {
   [self.visibleCells each:^(BRACollectionViewCell *cell) {
     [cell removeFromSuperview];
+    [cell removeTarget:self action:@selector(didSelectCell:) forControlEvents:UIControlEventTouchUpInside];
     [self enqueueReusableCell:cell withIdentifier:cell.reuseIdentifier];
+    
     [[_rowCellMap keysOfEntriesPassingTest:^BOOL(id key, BRACollectionViewCell *aCell, BOOL *stop) {
       return (cell == aCell);
     }] each:^(NSString *key) {
@@ -178,9 +180,28 @@
   
   [self.visibleCells each:^(BRACollectionViewCell *cell) {
     if (cell.superview == nil) {
+      NSIndexPath *indexPath = [self indexPathForCell:cell];
+      
+      if ([self.delegate respondsToSelector:@selector(collectionView:willDisplayCell:forRowAtIndexPath:)]) {
+        [self.delegate collectionView:self willDisplayCell:cell forRowAtIndexPath:indexPath];
+      }
+      
+      [cell addTarget:self action:@selector(didSelectCell:) forControlEvents:UIControlEventTouchUpInside];
+      
       [self addSubview:cell];
+      
+      if ([self.delegate respondsToSelector:@selector(collectionView:didDisplayCell:forRowAtIndexPath:)]) {
+        [self.delegate collectionView:self didDisplayCell:cell forRowAtIndexPath:indexPath];
+      }
     }
   }];
+}
+
+- (void)didSelectCell:(BRACollectionViewCell *)cell
+{
+  if ([self.delegate respondsToSelector:@selector(collectionView:didSelectRowAtIndexPath:)]) {
+    [self.delegate collectionView:self didSelectRowAtIndexPath:[self indexPathForCell:cell]];
+  }
 }
 
 #pragma mark - Getters
@@ -262,6 +283,16 @@
   CGFloat rowHeight = [(NSNumber *)[self.cellHeights objectAtIndex:row.integerValue] floatValue];
   
   return (LOCATIONS_INTERSECT(self.contentOffset.y, self.bounds.size.height, rowOffsetY, rowHeight));
+}
+
+- (NSIndexPath *)indexPathForCell:(BRACollectionViewCell *)cell
+{
+  NSArray *keys = [[_rowCellMap keysOfEntriesPassingTest:^BOOL(id key, BRACollectionViewCell *aCell, BOOL *stop) {
+    return (cell == aCell);
+  }] allObjects];
+  
+  NSInteger row = [(NSNumber *)[keys firstObject] integerValue];
+  return [NSIndexPath indexPathForRow:row inSection:0];
 }
 
 @end

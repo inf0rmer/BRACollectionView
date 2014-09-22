@@ -9,14 +9,19 @@
 #import <Kiwi/Kiwi.h>
 #import <BRACollectionView/BRACollectionView.h>
 #import "BRADataSource.h"
+#import "BRADelegate.h"
 
 @interface BRACollectionView()
 
 - (CGFloat)calculateContentHeight;
 - (void)removeCells;
 - (void)addCells;
+- (NSArray *)visibleCells;
 - (void)newVisibleCellsForArray:(NSArray *)array;
 - (void)enqueueReusableCell:(BRACollectionViewCell *)cell withIdentifier:(NSString *)identifier;
+- (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)didSelectCell:(BRACollectionViewCell *)cell;
+- (NSIndexPath *)indexPathForCell:(BRACollectionViewCell *)cell;
 
 @property (nonatomic, strong) NSArray *cellHeights;
 @property (nonatomic, strong) NSMutableDictionary *reusableCellPool;
@@ -208,6 +213,71 @@ describe(@"BRACollectionView", ^{
       it(@"Returns the cell", ^{
         BRACollectionViewCell *cell = [collectionView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
         [[cell should] equal:cell1];
+      });
+    });
+  });
+  
+  describe(@"BRACollectionViewDelegate protocol", ^{
+    let(delegate, ^id{
+      return [BRADelegate new];
+    });
+    
+    let(cell1, ^BRACollectionViewCell *{
+      return [BRACollectionViewCell new];
+    });
+    
+    describe(@"#collectionView:willDisplayCell:forRowAtIndexPath", ^{
+      beforeEach(^{
+        collectionView.delegate = delegate;
+        [collectionView stub:@selector(visibleCells) andReturn:@[cell1]];
+      });
+      
+      it(@"Is called when cell is about to display", ^{
+        [[delegate should] receive:@selector(collectionView:willDisplayCell:forRowAtIndexPath:) withArguments:collectionView, cell1, [NSIndexPath indexPathForRow:0 inSection:0], nil];
+        
+        [collectionView addCells];
+      });
+    });
+    
+    describe(@"#collectionView:didDisplayCell:forRowAtIndexPath", ^{
+      beforeEach(^{
+        collectionView.delegate = delegate;
+        [collectionView stub:@selector(visibleCells) andReturn:@[cell1]];
+      });
+      
+      it(@"Is called when cell is about to display", ^{
+        [[delegate should] receive:@selector(collectionView:didDisplayCell:forRowAtIndexPath:) withArguments:collectionView, cell1, [NSIndexPath indexPathForRow:0 inSection:0], nil];
+        
+        [collectionView addCells];
+      });
+    });
+    
+    describe(@"#collectionView:heightForRowAtIndexPath", ^{
+      beforeEach(^{
+        collectionView.delegate = delegate;
+      });
+      
+      it(@"Is called when #heightForRowAtIndexPath: is called", ^{
+        [[delegate should] receive:@selector(collectionView:heightForRowAtIndexPath:) withArguments:collectionView, [NSIndexPath indexPathForRow:0 inSection:0], nil];
+        
+        [collectionView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+      });
+    });
+    
+    describe(@"#collectionView:didSelectRowAtIndexPath:", ^{
+      let(indexPath, ^NSIndexPath *{
+        return [NSIndexPath indexPathForRow:1 inSection:0];
+      });
+      
+      beforeEach(^{
+        collectionView.delegate = delegate;
+        [collectionView stub:@selector(indexPathForCell:) andReturn:indexPath];
+      });
+      
+      it(@"Is called when a cell is tapped", ^{
+        [[delegate should] receive:@selector(collectionView:didSelectRowAtIndexPath:) withArguments:collectionView, indexPath, nil];
+        
+        [collectionView didSelectCell:cell1];
       });
     });
   });

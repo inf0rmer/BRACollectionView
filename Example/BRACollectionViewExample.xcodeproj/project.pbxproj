@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		132A4B9319D0B7060059762A /* BRADelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 132A4B9219D0B7060059762A /* BRADelegate.m */; };
 		137549F419D023BF001E2809 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 137549F319D023BF001E2809 /* main.m */; };
 		137549F719D023BF001E2809 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 137549F619D023BF001E2809 /* AppDelegate.m */; };
 		137549FA19D023BF001E2809 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 137549F919D023BF001E2809 /* ViewController.m */; };
@@ -30,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		132A4B9119D0B7060059762A /* BRADelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRADelegate.h; path = Delegates/BRADelegate.h; sourceTree = "<group>"; };
+		132A4B9219D0B7060059762A /* BRADelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRADelegate.m; path = Delegates/BRADelegate.m; sourceTree = "<group>"; };
 		137549EE19D023BF001E2809 /* BRACollectionViewExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BRACollectionViewExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		137549F219D023BF001E2809 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		137549F319D023BF001E2809 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -139,6 +142,8 @@
 			children = (
 				13754A2219D04278001E2809 /* BRADataSource.h */,
 				13754A2319D04278001E2809 /* BRADataSource.m */,
+				132A4B9119D0B7060059762A /* BRADelegate.h */,
+				132A4B9219D0B7060059762A /* BRADelegate.m */,
 			);
 			name = Delegates;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 			files = (
 				13754A2419D04278001E2809 /* BRADataSource.m in Sources */,
 				13754A1F19D03D88001E2809 /* BRACollectionViewTests.m in Sources */,
+				132A4B9319D0B7060059762A /* BRADelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
