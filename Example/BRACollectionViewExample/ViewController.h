@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <BRACollectionView/BRACollectionView.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <BRACollectionViewDataSource, BRACollectionViewDelegate>
 
 
 @end

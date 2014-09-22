@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface BRACollectionViewCell : NSObject
+@interface BRACollectionViewCell : UIView
+
+@property (nonatomic, strong) NSString *reuseIdentifier;
+
+@property (nonatomic, strong) UIView *separatorView;
+@property (nonatomic, strong) UILabel *nameLabel;
+
+- (instancetype)initWithReusableIdentifier:(NSString *)reuseIdentifier;
 
 @end

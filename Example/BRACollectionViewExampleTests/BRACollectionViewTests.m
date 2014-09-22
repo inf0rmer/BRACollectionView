@@ -13,8 +13,14 @@
 @interface BRACollectionView()
 
 - (CGFloat)calculateContentHeight;
+- (void)removeCells;
+- (void)addCells;
+- (void)newVisibleCellsForArray:(NSArray *)array;
+- (void)enqueueReusableCell:(BRACollectionViewCell *)cell withIdentifier:(NSString *)identifier;
 
 @property (nonatomic, strong) NSArray *cellHeights;
+@property (nonatomic, strong) NSMutableDictionary *reusableCellPool;
+@property (nonatomic, strong) NSArray *visibleCells;
 
 @end
 
@@ -92,6 +98,90 @@ describe(@"BRACollectionView", ^{
         
         [[theValue(collectionView.contentSize) should] equal:theValue(CGSizeMake(collectionView.bounds.size.width, 15 * 44.f))];
       });
+    });
+  });
+  
+  describe(@"#dequeueReusableCellWithIdentifier:", ^{
+    context(@"When there is no cached array for the given identifier", ^{
+      beforeEach(^{
+        [collectionView.reusableCellPool stub:@selector(hasKey:) andReturn:theValue(NO)];
+      });
+      
+      it(@"Returns nil", ^{
+        [[[collectionView dequeueReusableCellWithIdentifier:@"identifier"] should] beNil];
+      });
+    });
+    
+    context(@"When there are no cells for the given identifier", ^{
+      beforeEach(^{
+        collectionView.reusableCellPool[@"identifier"] = [NSMutableArray arrayWithCapacity:0];
+      });
+      
+      it(@"Returns nil", ^{
+        [[[collectionView dequeueReusableCellWithIdentifier:@"identifier"] should] beNil];
+      });
+    });
+    
+    context(@"When there is at least a cell for the given identifier", ^{
+      beforeEach(^{
+        collectionView.reusableCellPool[@"identifier"] = [[NSMutableArray alloc] initWithArray:@[[BRACollectionViewCell new]]];
+      });
+      
+      it(@"Returns the cell", ^{
+        [[[collectionView dequeueReusableCellWithIdentifier:@"identifier"] should] beKindOfClass:[BRACollectionViewCell class]];
+      });
+      
+      it(@"Deletes the cell from the pool", ^{
+        [collectionView dequeueReusableCellWithIdentifier:@"identifier"];
+        
+        NSArray *cellPool = collectionView.reusableCellPool[@"identifier"];
+        [[theValue(cellPool.count) should] equal:theValue(0)];
+      });
+    });
+  });
+  
+  describe(@"#layoutSubviews", ^{
+    let(cell1, ^BRACollectionViewCell *{
+      return [BRACollectionViewCell new];
+    });
+    
+    let(cell2, ^BRACollectionViewCell *{
+      return [BRACollectionViewCell new];
+    });
+    
+    let(cell3, ^BRACollectionViewCell *{
+      return [BRACollectionViewCell new];
+    });
+    
+    let(cell4, ^BRACollectionViewCell *{
+      return [BRACollectionViewCell new];
+    });
+    
+    beforeEach(^{
+      collectionView.visibleCells = @[cell1, cell2];
+      
+      [collectionView stub:@selector(newVisibleCellsForArray:) andReturn:@[cell3, cell4]];
+    });
+    
+    it(@"Removes old cells from the view", ^{
+      [[cell1 should] receive:@selector(removeFromSuperview)];
+      [[cell2 should] receive:@selector(removeFromSuperview)];
+      
+      [collectionView layoutSubviews];
+    });
+    
+    it(@"Enqueues the old cells for later reuse", ^{
+      [[collectionView should] receive:@selector(enqueueReusableCell:withIdentifier:) withArguments:cell1, cell1.reuseIdentifier, nil];
+      [[collectionView should] receive:@selector(enqueueReusableCell:withIdentifier:) withArguments:cell2, cell2.reuseIdentifier, nil];
+      
+      [collectionView layoutSubviews];
+    });
+    
+    it(@"Adds the new cells", ^{
+      [[collectionView should] receive:@selector(addSubview:) withArguments:cell3, nil];
+      [[collectionView should] receive:@selector(addSubview:) withArguments:cell4, nil];
+      
+      [collectionView layoutSubviews];
     });
   });
   
