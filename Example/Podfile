@@ -1,0 +1,7 @@
+platform :ios, :deployment_target => "7.0"
+
+pod 'BRACollectionView', :path => '../'
+
+target :BRACollectionViewExampleTests, :exclusive => true do
+  pod 'Kiwi'
+end

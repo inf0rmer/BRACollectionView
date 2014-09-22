@@ -1,0 +1,1 @@
+../../../../Classes/BRACollectionViewCell.h
