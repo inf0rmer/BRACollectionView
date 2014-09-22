@@ -185,6 +185,33 @@ describe(@"BRACollectionView", ^{
     });
   });
   
+  describe(@"#cellForRowAtIndexPath", ^{
+    context(@"When there is no cell at the path", ^{
+      it(@"Returns nil", ^{
+        [[[collectionView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:999 inSection:0]] should] beNil];
+      });
+    });
+    
+    context(@"When there is a cell at the path", ^{
+      let(cell1, ^BRACollectionViewCell *{
+        return [BRACollectionViewCell new];
+      });
+      
+      beforeEach(^{
+        collectionView.dataSource = dataSource;
+        collectionView.visibleCells = @[cell1];
+        [collectionView stub:@selector(numberOfRows) andReturn:theValue(1)];
+        [dataSource stub:@selector(collectionView:cellForRowAtIndexPath:) andReturn:cell1];
+        [collectionView layoutSubviews];
+      });
+      
+      it(@"Returns the cell", ^{
+        BRACollectionViewCell *cell = [collectionView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        [[cell should] equal:cell1];
+      });
+    });
+  });
+  
 });
 
 SPEC_END

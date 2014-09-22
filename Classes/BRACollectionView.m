@@ -22,6 +22,7 @@
 
 @implementation BRACollectionView {
   NSInteger _numberOfRows;
+  NSMutableDictionary *_rowCellMap;
 }
 
 #define LOCATIONS_INTERSECT(location1, length1, location2, length2) ((location1 + length1 >= location2) && (location2 + length2 >= location1))
@@ -31,8 +32,7 @@
 - (instancetype)init
 {
   if (self == [super init]) {
-    _numberOfRows = NSNotFound;
-    self.reusableCellPool = [NSMutableDictionary new];
+    [self commonInit];
   }
   
   return self;
@@ -41,8 +41,7 @@
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
   if (self == [super initWithCoder:aDecoder]) {
-    _numberOfRows = NSNotFound;
-    self.reusableCellPool = [NSMutableDictionary new];
+    [self commonInit];
   }
   
   return self;
@@ -51,11 +50,17 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
   if (self == [super initWithFrame:frame]) {
-    _numberOfRows = NSNotFound;
-    self.reusableCellPool = [NSMutableDictionary new];
+    [self commonInit];
   }
   
   return self;
+}
+
+- (void)commonInit
+{
+  _numberOfRows = NSNotFound;
+  _rowCellMap = [NSMutableDictionary new];
+  self.reusableCellPool = [NSMutableDictionary new];
 }
 
 - (void)layoutSubviews
@@ -67,6 +72,11 @@
   
   // Add visible cells
   [self addCells];
+}
+
+- (void)dealloc
+{
+  [self removeCells];
 }
 
 #pragma mark - Public Interface
@@ -114,7 +124,7 @@
 
 - (BRACollectionViewCell *)cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  return nil;
+  return (BRACollectionViewCell *)_rowCellMap[@(indexPath.row)];;
 }
 
 #pragma mark - Private Interface
@@ -154,6 +164,11 @@
   [self.visibleCells each:^(BRACollectionViewCell *cell) {
     [cell removeFromSuperview];
     [self enqueueReusableCell:cell withIdentifier:cell.reuseIdentifier];
+    [[_rowCellMap keysOfEntriesPassingTest:^BOOL(id key, BRACollectionViewCell *aCell, BOOL *stop) {
+      return (cell == aCell);
+    }] each:^(NSString *key) {
+      _rowCellMap[key] = [NSNull null];
+    }];
   }];
 }
 
@@ -222,6 +237,7 @@
   
   return [visibleIndices map:^BRACollectionViewCell *(NSIndexPath *indexPath) {
     BRACollectionViewCell *cell = [self.dataSource collectionView:self cellForRowAtIndexPath:indexPath];
+    _rowCellMap[@(indexPath.row)] = cell;
     
     __block CGFloat rowOffsetY = 0;
     [[[self rows] take:indexPath.row] each:^(NSNumber *aRow) {
