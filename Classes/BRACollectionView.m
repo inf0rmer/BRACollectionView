@@ -8,6 +8,13 @@
 
 #import "BRACollectionView.h"
 
+@interface BRACollectionView()
+
+- (CGFloat)calculateContentHeight;
+- (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
 @implementation BRACollectionView {
   NSInteger _numberOfRows;
 }
@@ -41,7 +48,46 @@
 
 - (void)reloadData
 {
+  // Reset _numberOfRows
   _numberOfRows = NSNotFound;
+  
+  // Recalculate content height
+  self.contentSize = CGSizeMake(self.bounds.size.width, [self calculateContentHeight]);
+}
+
+#pragma mark - Helpers
+
+- (NSArray *)rows
+{
+  NSRange range = NSMakeRange(0, [self numberOfRows]);
+  NSMutableArray *rows = [NSMutableArray array];
+  
+  for (NSUInteger i = range.location; i < range.location + range.length; i++) {
+    [rows addObject:[NSNumber numberWithUnsignedInteger:i]];
+  }
+  
+  return rows;
+}
+
+- (CGFloat)heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if ([self.delegate respondsToSelector:@selector(collectionView:heightForRowAtIndexPath:)]) {
+    return [self.delegate collectionView:self heightForRowAtIndexPath:indexPath];
+  }
+  
+  return 44.f;
+}
+
+- (CGFloat)calculateContentHeight
+{
+  // The latest ObjectiveSugar version on Cocoapods
+  // does not yet have #reduce. Sigh.
+  __block CGFloat totalHeight = 0;
+  [[self rows] each:^(NSNumber *rowNumber) {
+    totalHeight += [self heightForRowAtIndexPath:[NSIndexPath indexPathWithIndex:[rowNumber integerValue]]];
+  }];
+  
+  return totalHeight;
 }
 
 @end

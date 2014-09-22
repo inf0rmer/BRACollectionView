@@ -11,5 +11,7 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
 
+  s.dependency 'ObjectiveSugar'
+
   s.source_files = 'Classes', 'Classes/**/*.{h,m}'
 end

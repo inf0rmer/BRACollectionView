@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <ObjectiveSugar/ObjectiveSugar.h>
 #import "BRACollectionViewCell.h"
 
 /**
@@ -119,9 +120,10 @@
 
 @end
 
-@interface BRACollectionView : NSObject
+@interface BRACollectionView : UIScrollView
 
 @property (nonatomic, assign) id <BRACollectionViewDataSource> dataSource;
+@property (nonatomic, assign) id <BRACollectionViewDelegate> delegate;
 
 ///--------------------
 /// @name Data handling

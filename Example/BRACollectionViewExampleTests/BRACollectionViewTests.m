@@ -10,6 +10,12 @@
 #import <BRACollectionView/BRACollectionView.h>
 #import "BRADataSource.h"
 
+@interface BRACollectionView()
+
+- (CGFloat)calculateContentHeight;
+
+@end
+
 SPEC_BEGIN(BRACOLLECTIONVIEWSPEC)
 
 describe(@"BRACollectionView", ^{
@@ -53,16 +59,29 @@ describe(@"BRACollectionView", ^{
     beforeEach(^{
       collectionView.dataSource = dataSource;
       [dataSource stub:@selector(numberOfRowsForCollectionView:) andReturn:theValue(15)];
-      
-      // Ensure #numberOfRows is cached
-      [collectionView numberOfRows];
     });
     
     it(@"Busts the #numberOfRows cache", ^{
+      // Ensure #numberOfRows is cached
+      [collectionView stub:@selector(calculateContentHeight)];
+      [collectionView numberOfRows];
+      
       [collectionView reloadData];
       
       [[dataSource should] receive:@selector(numberOfRowsForCollectionView:)];
       [collectionView numberOfRows];
+    });
+    
+    context(@"When the delegate does not provide cell height", ^{
+      beforeEach(^{
+        [collectionView stub:@selector(numberOfRows) andReturn:theValue(15)];
+      });
+      
+      it(@"Sets the content height to the total number of cells * 44.f", ^{
+        [collectionView reloadData];
+        
+        [[theValue(collectionView.contentSize) should] equal:theValue(CGSizeMake(collectionView.bounds.size.width, 15 * 44.f))];
+      });
     });
   });
   
