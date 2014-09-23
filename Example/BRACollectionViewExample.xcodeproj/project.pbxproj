@@ -16,6 +16,8 @@
 		13754A0219D023BF001E2809 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13754A0019D023BF001E2809 /* LaunchScreen.xib */; };
 		13754A1F19D03D88001E2809 /* BRACollectionViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13754A1E19D03D88001E2809 /* BRACollectionViewTests.m */; };
 		13754A2419D04278001E2809 /* BRADataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 13754A2319D04278001E2809 /* BRADataSource.m */; };
+		13AD4B2719D17B5A00F59A19 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13AD4B2619D17B5A00F59A19 /* MapKit.framework */; };
+		13B6CD8419D1855C0066B8F6 /* BRACollectionViewCellTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B6CD8319D1855C0066B8F6 /* BRACollectionViewCellTests.m */; };
 		6EFF1B230B294130867A8DAB /* libPods-BRACollectionViewExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C381B6F9D3418FB618C9A6 /* libPods-BRACollectionViewExampleTests.a */; };
 		D83440C09B504CC49045188F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4A14186FDF74823BE567B8E /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -48,6 +50,8 @@
 		13754A1E19D03D88001E2809 /* BRACollectionViewTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRACollectionViewTests.m; sourceTree = "<group>"; };
 		13754A2219D04278001E2809 /* BRADataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BRADataSource.h; path = Delegates/BRADataSource.h; sourceTree = "<group>"; };
 		13754A2319D04278001E2809 /* BRADataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BRADataSource.m; path = Delegates/BRADataSource.m; sourceTree = "<group>"; };
+		13AD4B2619D17B5A00F59A19 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		13B6CD8319D1855C0066B8F6 /* BRACollectionViewCellTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BRACollectionViewCellTests.m; sourceTree = "<group>"; };
 		2F4806D657BD4863810DDAFF /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		37C381B6F9D3418FB618C9A6 /* libPods-BRACollectionViewExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BRACollectionViewExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91FC19B999F94E4493EAD93D /* Pods-BRACollectionViewExampleTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BRACollectionViewExampleTests.xcconfig"; path = "Pods/Pods-BRACollectionViewExampleTests.xcconfig"; sourceTree = "<group>"; };
@@ -59,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13AD4B2719D17B5A00F59A19 /* MapKit.framework in Frameworks */,
 				D83440C09B504CC49045188F /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -125,6 +130,7 @@
 				13754A2119D04262001E2809 /* Delegates */,
 				13754A0B19D023BF001E2809 /* Supporting Files */,
 				13754A1E19D03D88001E2809 /* BRACollectionViewTests.m */,
+				13B6CD8319D1855C0066B8F6 /* BRACollectionViewCellTests.m */,
 			);
 			path = BRACollectionViewExampleTests;
 			sourceTree = "<group>";
@@ -151,6 +157,7 @@
 		9A5B7687BACA40BF99934ED9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				13AD4B2619D17B5A00F59A19 /* MapKit.framework */,
 				A4A14186FDF74823BE567B8E /* libPods.a */,
 				37C381B6F9D3418FB618C9A6 /* libPods-BRACollectionViewExampleTests.a */,
 			);
@@ -335,6 +342,7 @@
 			files = (
 				13754A2419D04278001E2809 /* BRADataSource.m in Sources */,
 				13754A1F19D03D88001E2809 /* BRACollectionViewTests.m in Sources */,
+				13B6CD8419D1855C0066B8F6 /* BRACollectionViewCellTests.m in Sources */,
 				132A4B9319D0B7060059762A /* BRADelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

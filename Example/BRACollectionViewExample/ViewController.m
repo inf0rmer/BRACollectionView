@@ -11,22 +11,38 @@
 
 @interface ViewController ()
 
-@property (nonatomic, strong) NSMutableArray *data;
+@property (nonatomic, strong) NSArray *data;
 
 @end
 
 @implementation ViewController
 
-static NSString *cellIdentifier = @"Cell";
+static NSString *imageCellIdentifier = @"ImageCell";
+static NSString *mapCellIdentifier = @"MapCell";
+static NSString *kTypeMap = @"map";
+static NSString *kTypeImage = @"image";
 
 - (void)viewDidLoad {
   [super viewDidLoad];
   // Do any additional setup after loading the view, typically from a nib.
   
-  self.data = [@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11", @"12", @"13", @"14", @"15", @"16", @"17"] mutableCopy];
+  self.data = @[
+                 @{
+                   @"title": @"This is a cell with an image",
+                   @"subtitle": @"This is a subtitle for this cell. It can break in two lines just in case it's too long.",
+                   @"image": [UIImage imageNamed:@"kitten"],
+                   @"type": kTypeImage
+                   },
+                 @{
+                   @"title": @"This is a cell with a map",
+                   @"subtitle": @"This is a subtitle for this cell. It can break in two lines just in case it's too long.",
+                   @"coordinates": @{ @"lat": @(52.52426800), @"lon": @(13.40629000) },
+                   @"type": kTypeMap
+                   }
+                 ];
   
   BRACollectionView *collectionView = [[BRACollectionView alloc] initWithFrame:self.view.bounds];
-  collectionView.backgroundColor = UIColor.yellowColor;
+  collectionView.backgroundColor = UIColor.whiteColor;
   collectionView.delegate = self;
   collectionView.dataSource = self;
   
@@ -61,14 +77,31 @@ static NSString *cellIdentifier = @"Cell";
 - (BRACollectionViewCell *)collectionView:(BRACollectionView *)collectionView
                     cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+  NSDictionary *item = [self.data objectAtIndex:indexPath.row];
+  
+  BOOL isMap = [item[@"type"] isEqualToString:kTypeMap];
+  NSString *cellIdentifier = (isMap) ? mapCellIdentifier : imageCellIdentifier;
+  BRACollectionViewStyle style = (isMap) ? BRACollectionViewStyleMap : BRACollectionViewStyleImage;
+  
   BRACollectionViewCell *cell = [collectionView dequeueReusableCellWithIdentifier:cellIdentifier];
   
   if (cell == nil) {
-    cell = [[BRACollectionViewCell alloc] initWithReusableIdentifier:cellIdentifier];
+    cell = [[BRACollectionViewCell alloc] initWithStyle:style reuseIdentifier:cellIdentifier];
   }
   
-  cell.backgroundColor = UIColor.redColor;
-  cell.nameLabel.text = [self.data objectAtIndex:indexPath.row];
+  cell.backgroundColor = UIColor.whiteColor;
+  
+  cell.titleLabel.text = item[@"title"];
+  cell.detailLabel.text = item[@"subtitle"];
+  
+  if (isMap) {
+    double lat = [(NSNumber *) item[@"coordinates"][@"lat"] doubleValue];
+    double lon = [(NSNumber *) item[@"coordinates"][@"lon"] doubleValue];
+    
+    [cell.mapView setCenterCoordinate:CLLocationCoordinate2DMake(lat, lon) animated:YES];
+  } else {
+    cell.imageView.image = item[@"image"];
+  }
   
   return cell;
 }
